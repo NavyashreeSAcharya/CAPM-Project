@@ -1,0 +1,79 @@
+{
+  "name": "customers_app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Welcome to your new CAP project.",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "workspaces": [
+    "app/*"
+  ],
+  "scripts": {
+    "start": "cds-serve",
+    "watch-complaints": "cds watch --open complaints.complaints/index.html?sap-ui-xx-viewCache=false --livereload false",
+    "undeploy": "cf undeploy customers_app --delete-services --delete-service-keys --delete-service-brokers",
+    "build": "rimraf resources mta_archives && mbt build --mtar customers_app",
+    "test": "node test/test.js",
+    "deploy": "cf deploy mta_archives/customers_app_1.0.0.mtar --retries 1",
+    "watch-project1": "cds watch --open project1/index.html?sap-ui-xx-viewCache=false --livereload false"
+  },
+  "dependencies": {
+    "@cap-js-community/odata-v2-adapter": "^1.16.1",
+    "@cap-js/hana": "^3",
+    "@sap-cloud-sdk/connectivity": "^4",
+    "@sap-cloud-sdk/http-client": "^4",
+    "@sap-cloud-sdk/resilience": "^4",
+    "@sap/cds": "^10",
+    "@sap/xssec": "^4"
+  },
+  "devDependencies": {
+    "@cap-js/cds-test": "^1.0.2",
+    "@cap-js/sqlite": "^3",
+    "@sap/cds-dk": "^10",
+    "cds-plugin-ui5": "^0.17.0",
+    "mbt": "^1.2.49",
+    "rimraf": "^5.0.5"
+  },
+  "cds": {
+    "requires": {
+      "[production]": {
+        "db": {
+          "kind": "hana"
+        },
+        "auth": "xsuaa"
+      },
+      "auth": {
+        "kind": "mocked",
+        "users": {
+          "anil": {
+            "password": "anil",
+            "roles": [
+              "admin"
+            ]
+          },
+          "sana": {
+            "password": "sana",
+            "roles": [
+              "viewer"
+            ]
+          }
+        }
+      },
+      "connectivity": true,
+      "destinations": true,
+      "html5-repo": true,
+      "metadata": {
+        "kind": "odata-v2",
+        "model": "srv/external/metadata",
+        "credentials": {
+          "url": "https://services.odata.org/V2/Northwind/Northwind.svc/"
+        }
+      }
+    }
+  }
+}

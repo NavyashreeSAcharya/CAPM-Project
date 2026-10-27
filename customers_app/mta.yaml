@@ -1,0 +1,231 @@
+_schema-version: 3.3.0
+ID: customers_app
+description: CAP Customers Application with HTML5 Repository
+version: 1.0.0
+
+modules:
+  # 1. CAP service
+  - name: customers_app-srv
+    type: nodejs
+    path: gen/srv
+    requires:
+      - name: customers_app-auth
+      - name: customers_app-db
+      - name: customers_app-connectivity
+      - name: customers_app-destination
+    provides:
+      - name: srv-api
+        properties:
+          srv-url: ${default-url}
+    parameters:
+      buildpack: nodejs_buildpack
+      instances: 1
+    build-parameters:
+      builder: npm-ci
+
+  # 2. HANA database deployer
+  - name: customers_app-db-deployer
+    type: hdb
+    path: gen/db
+    requires:
+      - name: customers_app-db
+
+  # 3. Custom approuter (retained from the original MTA)
+  - name: customers_app
+    type: approuter.nodejs
+    path: .deploy/app-router
+    requires:
+      - name: srv-api
+        group: destinations
+        properties:
+          forwardAuthToken: true
+          name: srv-api
+          url: ~{srv-url}
+      - name: customers_app-auth
+      - name: customers_app-destination
+      - name: customers_app-destination-service
+        group: destinations
+        properties:
+          forwardAuthToken: false
+          name: ui5
+          url: https://ui5.sap.com
+      - name: customers_app-html5-runtime
+    provides:
+      - name: app-api
+        properties:
+          app-protocol: ${protocol}
+          app-uri: ${default-uri}
+    parameters:
+      disk-quota: 256M
+      keep-existing-routes: true
+      memory: 256M
+
+  # 4. Deploy both HTML5 applications to the repository host
+  - name: customers_app-app-content
+    type: com.sap.application.content
+    path: .
+    requires:
+      - name: customers_app-html5-repo-host
+        parameters:
+          content-target: true
+    build-parameters:
+      build-result: resources
+      requires:
+        - name: complaintscomplaints
+          artifacts:
+            - complaintscomplaints.zip
+          target-path: resources/
+        - name: project1
+          artifacts:
+            - project1.zip
+          target-path: resources/
+
+  # 5. Destination content: repository host and XSUAA destinations
+  - name: customers_app-destination-content
+    type: com.sap.application.content
+    requires:
+      - name: customers_app-destination-service
+        parameters:
+          content-target: true
+      - name: customers_app-html5-repo-host
+        parameters:
+          service-key:
+            name: customers_app-html5-repo-host-key
+      - name: customers_app-auth
+        parameters:
+          service-key:
+            name: customers_app-auth-key
+    parameters:
+      content:
+        instance:
+          destinations:
+            - Name: customers_app_html_repo_host
+              ServiceInstanceName: customers_app-html5-repo-host
+              ServiceKeyName: customers_app-html5-repo-host-key
+              sap.cloud.service: customers.app
+            - Authentication: OAuth2UserTokenExchange
+              Name: customers_app_uaa
+              ServiceInstanceName: customers_app-auth
+              ServiceKeyName: customers_app-auth-key
+              sap.cloud.service: customers.app
+          existing_destinations_policy: update
+    build-parameters:
+      no-source: true
+
+  # 6. HTML5 application: complaints
+  - name: complaintscomplaints
+    type: html5
+    path: app/complaints
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm install
+        - npm run build:cf
+      supported-platforms: []
+
+  # 7. HTML5 application: project1
+  - name: project1
+    type: html5
+    path: app/project1
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm install
+        - npm run build:cf
+      supported-platforms: []
+
+resources:
+  # XSUAA
+  - name: customers_app-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      path: ./xs-security.json
+      service: xsuaa
+      service-plan: application
+      config:
+        tenant-mode: dedicated
+        xsappname: customers_app-${org}-${space}
+        oauth2-configuration:
+          credential-types:
+            - binding-secret
+            - x509
+          redirect-uris:
+            - https://*~{app-api/app-uri}/**
+    requires:
+      - name: app-api
+
+  # HANA HDI container
+  - name: customers_app-db
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana
+      service-plan: hdi-shared
+
+  # Connectivity
+  - name: customers_app-connectivity
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: connectivity
+      service-plan: lite
+
+  # Destination service bound to the CAP service
+  - name: customers_app-destination
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: destination
+      service-plan: lite
+
+  # Destination service for HTML5 runtime and CAP endpoint
+  - name: customers_app-destination-service
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: destination
+      service-plan: lite
+      service-name: customers_app-destination-service
+      config:
+        HTML5Runtime_enabled: true
+        init_data:
+          instance:
+            existing_destinations_policy: update
+            destinations:
+              - Name: ui5
+                Type: HTTP
+                ProxyType: Internet
+                Authentication: NoAuthentication
+                URL: https://ui5.sap.com
+              - Name: srv-api
+                Type: HTTP
+                ProxyType: Internet
+                Authentication: NoAuthentication
+                HTML5.DynamicDestination: true
+                HTML5.ForwardAuthToken: true
+                URL: ~{srv-api/srv-url}
+    requires:
+      - name: srv-api
+
+  # HTML5 Applications Repository host
+  - name: customers_app-html5-repo-host
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-host
+
+  # HTML5 Applications Repository runtime
+  - name: customers_app-html5-runtime
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-runtime
+
+parameters:
+  deploy_mode: html5-repo
+  enable-parallel-deployments: true
+
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm ci
+        - npx cds build --production

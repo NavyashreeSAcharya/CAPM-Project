@@ -1,0 +1,11 @@
+ID,complaint_complaintNumber,resolutionText,resolvedDate,resolvedBy
+3f2a1b0c-949e-4b7a-9e88-7e449a5e2001,COM-01,Updated printer firmware to v2.14 and cleared job spooler memory.,2026-10-09,Nancy
+a7b6c5d4-8392-4f01-a123-b456c789d002,COM-02,Reversed the duplicate subscription charge and issued a credit memo.,2026-10-09,David
+e9f8a7b6-1234-4c56-b789-0d123e456f03,COM-03,Package intercepted and hand-delivered by local courier partner.,2026-10-09,Nancy
+c1d2e3f4-5678-4a90-b123-c456d789e004,COM-04,Applied zero-day patch to client desktop agent to prevent memory leaks.,2026-10-09,Nancy
+d2e3f4a5-6789-4b01-c234-d567e890f005,COM-05,Manually generated secure password link and validated user access.,2026-10-09,David
+e3f4a5b6-7890-4c12-d345-e678f901a006,COM-06,Processed original refund request via gateway due to verified banking drop.,2026-10-09,Nancy
+f4a5b6c7-8901-4d23-e456-f7890a123b07,COM-07,Scaled up background server instances to balance sudden peak traffic.,2026-10-09,David
+a5b6c7d8-9012-4e34-f567-a8901b234c08,COM-08,Dispatched fresh replacement hardware straight from main warehouse stock.,2026-10-09,Nancy
+b6c7d8e9-0123-4f45-a678-b9012c345d09,COM-09,Guided customer to complete dynamic cache flush which restored full app routing.,2026-10-09,David
+c7d8e9f0-1234-4a56-b789-c0123d456e10,COM-10,Optimized API payload index parsing rules to eliminate timeout intervals.,2026-10-09,Nancy

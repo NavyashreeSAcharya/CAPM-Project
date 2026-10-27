@@ -1,0 +1,49 @@
+<mvc:View
+    controllerName="complaints.complaints.controller.CreateCustomer"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core">
+    
+    <Page title='{i18n>CustomersTitle}'  showNavButton="true" navButtonPress=".onNavBack" titleLevel="H1">
+        <content>
+          <VBox width="100%" 
+            alignItems="Center" 
+            justifyContent="SpaceAround" 
+            class="sapUiSmallMargin">
+             <VBox width="65%"  class="sapUiLargeMargin">
+            <!-- Clean layout wrapper for data input fields -->
+            <f:SimpleForm id="newCustomerForm" editable="true" layout="ResponsiveGridLayout" columnsXL="2" columnsM="2" columnsL="1"  >
+                <f:content>
+                   
+                    <Label text='{i18n>customerNumber}' required="true"/>
+                    <Input value="{customerModel>/customerNumber}" placeholder="Enter Customer Number" class="sapUiSmallMarginBottom"/>
+
+                    <Label text='{i18n>customerName}' required="true"/>
+                    <Input value="{customerModel>/customerName}" placeholder="Enter Customer Name" class="sapUiSmallMarginBottom"/>
+
+                    <Label text='{i18n>email}' required="true"/>
+                    <Input value="{customerModel>/email}" placeholder="Enter Customer email" class="sapUiSmallMarginBottom"/>
+
+                    <Label text='{i18n>phone}' required="true"/>
+                    <Input value="{customerModel>/phone}" placeholder="Enter Customer Phone Number" class="sapUiSmallMarginBottom"/>
+                    
+                        
+                </f:content>
+            </f:SimpleForm>
+            </VBox>
+            </VBox>
+        </content>
+
+        
+        <footer>
+            <OverflowToolbar>
+                <ToolbarSpacer />
+                <!-- Save submits the record to CAPM, Cancel discards the draft -->
+                <Button text='{i18n>update}' type="Emphasized" press=".onUpdateCustomer" visible="{= !!${customerModel>/__metadata/uri} }" />
+                <Button text='{i18n>save}' type="Accept" press=".onSaveCustomer" visible="{= !${customerModel>/__metadata/uri} }"/>
+                <Button text='{i18n>cancel}' type="Reject" press="onNavBack" />
+            </OverflowToolbar>
+        </footer>
+    </Page>
+</mvc:View>

@@ -1,0 +1,11 @@
+ID,complaint_complaintNumber,comment,commentedBy,commentDate
+2db8f90c-939e-4a6a-8d77-6d338a4d1001,COM-01,Printer firmware updated,Nancy,2026-10-09T10:40:00Z
+f8e7d23a-14d2-4b78-9e5c-ff2249b12002,COM-02,Spoke with accounting department to verify payment logs,David,2026-10-09T10:42:15Z
+a3c4b5e6-7890-4c12-b345-6d789e012303,COM-03,Package located at regional distribution center,Nancy,2026-10-09T10:45:30Z
+b4d5c6e7-8901-4d23-c456-7e890f123404,COM-04,Log file requested from client console,Nancy,2026-10-09T10:47:00Z
+c5e6d7f8-9012-4e34-d567-8f901a234505,COM-05,Resent verification link manually via admin panel,David,2026-10-09T10:50:00Z
+d6f7e8a9-0123-4f45-e678-9a012b345606,COM-06,Customer confirmed bank statement mismatch,Nancy,2026-10-09T10:51:10Z
+e7a8b9c0-1234-4a56-f789-0b123c456707,COM-07,Server logs indicate sudden memory spike,David,2026-10-09T10:52:45Z
+f8b9c0d1-2345-4b67-a890-1c234d567808,COM-08,Replacement request submitted to warehouse,Nancy,2026-10-09T10:53:20Z
+a9c0d1e2-3456-4c78-b901-2d345e678909,COM-09,Recommended user clear browser data cache,David,2026-10-09T10:54:00Z
+b0d1e2f3-4567-4d89-c012-3e456f789010,COM-10,Load balancer updated to handle webhook traffic surge,Nancy,2026-10-09T10:54:15Z

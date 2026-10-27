@@ -1,0 +1,54 @@
+{
+  "xsappname": "customercomplaints",
+  "tenant-mode": "dedicated",
+  "description": "Security configuration for Customer Complaint Management App",
+  "scopes": [
+    {
+      "name": "$XSAPPNAME.viewer",
+      "description": "Access complaints application services"
+    },
+    {
+      "name": "$XSAPPNAME.Admin",
+      "description": "Administrator access to complaints application services"
+    }
+  ],
+  "role-templates": [
+    {
+      "name": "viewer",
+      "description": "Application viewer",
+      "scope-references": [
+        "$XSAPPNAME.viewer"
+      ]
+    },
+    {
+      "name": "Admin",
+      "description": "Application administrator",
+      "scope-references": [
+        "$XSAPPNAME.viewer",
+        "$XSAPPNAME.Admin"
+      ]
+    }
+  ],
+  "role-collections": [
+    {
+      "name": "CustomerComplaints_ViewUser",
+      "description": "Application viewers",
+      "role-template-references": [
+        "$XSAPPNAME.viewer"
+      ]
+    },
+    {
+      "name": "CustomerComplaints_AdminUser",
+      "description": "Application administrators",
+      "role-template-references": [
+        "$XSAPPNAME.Admin"
+      ]
+    }
+  ],
+  "oauth2-configuration": {
+    "credential-types": [
+      "binding-secret",
+      "x509"
+    ]
+  }
+}

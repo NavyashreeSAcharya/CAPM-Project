@@ -1,0 +1,12 @@
+complaintNumber,customer_customerNumber,category,priority,subject,description,assignedTo,status
+COM-01,CUS-01,Software Bug,Low,Technical Issue,Issue in the Purchased printer,Nancy,Open
+COM-02,CUS-02,Billing Dispute Dispute,High,Overcharge on Invoice,Charged twice for subscription,David,Open
+COM-03,CUS-03,Delayed Delivery,Medium,Delayed Shipment,Package stuck at transit hub,Nancy,Open
+COM-04,CUS-04,Software Bug,Critical,System Crash,Application closes on startup,Nancy,Open
+COM-05,CUS-05,Account Access,Low,Password Reset Failure,OTP email not received,David,Open
+COM-06,CUS-06,Billing Dispute,Medium,Refund Request,Returned item but no refund yet,Nancy,Open
+COM-07,CUS-07,Software Bug,High,Login Error,Error 500 when accessing dashboard,David,Open
+COM-08,CUS-08,Delayed Delivery,Low,Damaged Item,Box arrived torn and contents broken,Nancy,Open
+COM-09,CUS-09,Account Access,Medium,Profile Update Error,Cannot update primary email address,David,Open
+COM-10,CUS-10,Software Bug,High,API Timeout,Webhooks failing with 504 gateway,Nancy,Open
+COM-11,CUS-11,Billing Dispute,Critical,Fraudulent Activity,Unrecognized charge on statement,David,Open

@@ -1,0 +1,298 @@
+<mvc:View controllerName="complaints.complaints.controller.complaints"
+           xmlns:mvc="sap.ui.core.mvc"
+		   xmlns="sap.uxap"
+		   xmlns:layout="sap.ui.layout"
+		   xmlns:m="sap.m"
+	       xmlns:f="sap.ui.layout.form"
+	       xmlns:core="sap.ui.core"
+		height="100%">
+    	<ObjectPageLayout id="ObjectPageLayout"
+		enableLazyLoading="true"
+		useIconTabBar="true"
+		showTitleInHeaderContent="true"
+		upperCaseAnchorBar="false">
+		<headerTitle>
+			<ObjectPageDynamicHeaderTitle>
+				<expandedHeading>
+					<m:FlexBox fitContainer="true" alignItems="Center">
+						<m:Avatar src="sap-icon://customer-and-contacts" displaySize="L" class="sapUiTinyMarginEnd"/>
+						<m:VBox >
+						<m:Title text='{i18n>title}' wrapping="true" />
+						<m:Text text='{i18n>subtitle}'/>
+						</m:VBox>
+					</m:FlexBox>
+				</expandedHeading>
+
+				<snappedHeading>
+					<m:FlexBox fitContainer="true" alignItems="Center">
+						<m:Avatar src="sap-icon://customer-and-contacts" displaySize="L" backgroundColor="Accent3" class="sapUiTinyMarginEnd"/>
+						<m:VBox >
+						<m:Title text='{i18n>title}' wrapping="true" />
+						<m:Text text='{i18n>subtitle}'/>
+						</m:VBox>
+					</m:FlexBox>
+				</snappedHeading>
+			</ObjectPageDynamicHeaderTitle>
+		</headerTitle>
+
+
+		<sections>
+			<ObjectPageSection titleUppercase="false" id="complaints" title='{i18n>ComplaintsTitle}'>
+			<subSections>
+			 <ObjectPageSubSection id="complaintsSubSection" title='{i18n>ComplaintsTitle}'>
+			 <blocks>
+			  	<m:Table id="idComplaintsTable"
+		inset="false"
+		mode="SingleSelectLeft"
+		items="{
+			path: '/Complaints'
+		}">
+		<m:headerToolbar>
+			<m:OverflowToolbar>
+				<m:content>
+					<m:Title text='{i18n>ComplaintsTitle}' level="H2"/>
+					<m:ToolbarSpacer />
+					<m:Button id="btnCreate1" 
+                          text='{i18n>addComplaint}'
+                          type="Emphasized" 
+                          icon="sap-icon://add" 
+                          press=".onCreateComplaint"/>
+                
+                <!-- Delete Button (Reject style gives it a clean red alert color) -->
+                <m:Button id="btnDelete1" 
+                          text='{i18n>deleteComplaint}'
+                          type="Reject" 
+                          icon="sap-icon://delete" 
+                          press=".onDeleteComplaint"/>
+				</m:content>
+			</m:OverflowToolbar>
+		</m:headerToolbar>
+		<m:columns>
+			<m:Column
+				width="12em">
+				<m:Text text='{i18n>complaintNumber}' />
+			</m:Column>
+			<m:Column
+				minScreenWidth="Tablet"
+				demandPopin="true">
+				<m:Text text='{i18n>customer}' />
+			</m:Column>
+			<m:Column
+				minScreenWidth="Desktop"
+				demandPopin="true"
+				hAlign="Center">
+				<m:Text text='{i18n>category}' />
+			</m:Column>
+			<m:Column
+				minScreenWidth="Desktop"
+				demandPopin="true"
+				hAlign="Center">
+				<m:Text text='{i18n>priority}' />
+			</m:Column>
+			<m:Column
+				hAlign="Center">
+				<m:Text text='{i18n>subject}' />
+			</m:Column>
+			<m:Column
+				hAlign="Center">
+				<m:Text text='{i18n>description}' />
+			</m:Column>
+			<m:Column
+				hAlign="Center">
+				<m:Text text='{i18n>assignedTo}' />
+			</m:Column>
+			<m:Column
+				hAlign="Center">
+				<m:Text text='{i18n>status}' />
+			</m:Column>
+		</m:columns>
+		<m:items>
+			<m:ColumnListItem vAlign="Middle" type="Navigation" press="onRowPress">
+				<m:cells>
+					<m:ObjectIdentifier id="idComplaintInput"
+						text="{complaintNumber}"/>
+					<m:Text
+						text="{customer_customerNumber}" />
+					<m:Text
+						text="{category}" />
+					<m:ObjectStatus
+						text="{priority}" 
+						state="{= ${priority} === 'Critical' ? 'Error' 
+                        : ${priority} === 'High'     ? 'Warning' 
+                        : ${priority} === 'Medium'   ? 'Information' 
+                        : 'Success' }" />
+					<m:Text
+						text="{subject}"
+					/>
+					<m:Text
+						text="{description}"
+					/>
+					<m:Text
+						text="{assignedTo}"
+					/>
+					<m:ObjectStatus
+                       text="{status}"
+                        state="{= ${status} === 'Open' ? 'Error' : (${status} === 'Closed' ? 'Success' : 'None') }" 
+                    />
+					
+
+				</m:cells>
+			</m:ColumnListItem>
+		</m:items>
+	</m:Table>
+
+	</blocks>
+	  </ObjectPageSubSection>
+	</subSections>
+			</ObjectPageSection>
+
+			<ObjectPageSection titleUppercase="false" id="customers" title='{i18n>CustomersTitle}'>
+					<subSections>
+			 <ObjectPageSubSection id="customersSubSection" title='{i18n>CustomersTitle}'>
+			 <blocks>
+			  	<m:Table id="idCustomersTable"
+		inset="false"
+		mode="SingleSelectLeft"
+		items="{
+			path: '/Customers'
+		}">
+		<m:headerToolbar>
+			<m:OverflowToolbar>
+				<m:content>
+					<m:Title text='{i18n>CustomersTitle}' level="H2"/>
+					<m:ToolbarSpacer />
+					<m:Button id="btnCreate" 
+                          text='{i18n>addCustomer}' 
+                          type="Emphasized" 
+                          icon="sap-icon://add" 
+                          press=".onCreateCustomer"/>
+                
+                <!-- Delete Button (Reject style gives it a clean red alert color) -->
+                <m:Button id="btnDelete" 
+                          text='{i18n>deleteCustomer}' 
+                          type="Reject" 
+                          icon="sap-icon://delete" 
+                          press=".onDeleteCustomer"/>
+				</m:content>
+			</m:OverflowToolbar>
+		</m:headerToolbar>
+		<m:columns>
+			<m:Column
+				width="12em">
+				<m:Text text='{i18n>customerNumber}'/>
+			</m:Column>
+			<m:Column>
+				<m:Text text='{i18n>customerName}' />
+			</m:Column>
+			<m:Column
+				hAlign="Center">
+				<m:Text text='{i18n>email}' />
+			</m:Column>
+			<m:Column
+				hAlign="Center">
+				<m:Text text='{i18n>phone}' />
+			</m:Column>
+		</m:columns>
+		<m:items>
+			<m:ColumnListItem vAlign="Middle" type="Navigation" press="onRowPressCustomer">
+				<m:cells>
+					<m:ObjectIdentifier
+						text="{customerNumber}"/>
+					<m:Text
+						text="{customerName}" />
+					<m:Text
+						text="{email}" />
+					<m:Text
+						text="{phone}"
+					/>
+				</m:cells>
+			</m:ColumnListItem>
+		</m:items>
+	</m:Table>
+
+	</blocks>
+	  </ObjectPageSubSection>
+	</subSections>
+			</ObjectPageSection>
+    
+
+	
+			<ObjectPageSection titleUppercase="false" id="employees" title="Employee Details">
+					<subSections>
+			 <ObjectPageSubSection id="employeesSubSection" title='{i18n>assigneeTab}'>
+			 <blocks>
+			  	<m:Table id="idEmployeesTable"
+		inset="false"
+		items="{
+			path: '/Employees'
+		}">
+		<m:headerToolbar>
+			<m:OverflowToolbar>
+				<m:content>
+					<m:Title text='{i18n>assigneeTitle}' level="H2"/>
+					<m:ToolbarSpacer />
+				</m:content>
+			</m:OverflowToolbar>
+		</m:headerToolbar>
+		<m:columns>
+			<m:Column
+				width="12em">
+				<m:Text text='{i18n>id}'/>
+			</m:Column>
+			<m:Column>
+				<m:Text text='{i18n>name}' />
+			</m:Column>
+			<m:Column
+				hAlign="Center">
+				<m:Text text='{i18n>assigneetitle}' />
+			</m:Column>
+			<m:Column
+				hAlign="Center">
+				<m:Text text='{i18n>country}' />
+			</m:Column>
+			<m:Column
+				hAlign="Center">
+				<m:Text text='{i18n>city}' />
+			</m:Column>
+			<m:Column
+				hAlign="Center">
+				<m:Text text='{i18n>homePhone}' />
+			</m:Column>
+			<m:Column
+				hAlign="Center">
+				<m:Text text='{i18n>extension}' />
+			</m:Column>
+		</m:columns>
+		<m:items>
+			<m:ColumnListItem vAlign="Middle">
+				<m:cells>
+					<m:ObjectIdentifier
+						text="{EmployeeID}"/>
+					<m:Text
+						text="{FirstName} {LastName}" />
+					<m:Text
+						text="{Title}" />
+					<m:Text
+						text="{Country}"
+					/>
+					<m:Text
+						text="{City}" />
+					<m:Text
+						text="{HomePhone}" />
+					<m:Text
+						text="{Extension}" />		
+				</m:cells>
+			</m:ColumnListItem>
+		</m:items>
+	</m:Table>
+
+	</blocks>
+	  </ObjectPageSubSection>
+	</subSections>
+			</ObjectPageSection>
+
+			
+
+		</sections>
+	</ObjectPageLayout>
+</mvc:View>

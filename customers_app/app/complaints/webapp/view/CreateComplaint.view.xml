@@ -1,0 +1,209 @@
+<mvc:View
+    controllerName="complaints.complaints.controller.CreateComplaint"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core">
+    
+    <Page title='{i18n>ComplaintTitle}'  showNavButton="true" navButtonPress=".onNavBack" titleLevel="H1"  class="sapUiContentPadding">
+        <content>
+          
+            <!-- Clean layout wrapper for data input fields -->
+            <f:SimpleForm id="newComplaintForm" editable="true" layout="ColumnLayout" 
+            columnsXL="3"
+              columnsL="3" 
+              columnsM="2" 
+              labelSpanXL="4"
+              labelSpanL="4"
+              labelSpanM="4"
+              labelSpanS="12" >
+                <f:content>
+                   
+                    <Label text='{i18n>complaintNumber}' required="true"/>
+                    <Input value="{complaintModel>/complaintNumber}" placeholder="Enter Complaint Number" class="sapUiSmallMarginBottom"/>
+                    
+                    <Label text='{i18n>customer}' required="true"/>
+                   <Input 
+                    value="{complaintModel>/customer_customerNumber}" 
+                    placeholder="Enter customer name"
+                    showSuggestion="true"                                           
+                    suggestionItems="{/Customers}"
+                    suggestionItemSelected="onCustomerSelected"
+                    class="sapUiSmallMarginBottom">
+                    <suggestionItems>
+                         <!-- The key attribute must hold the raw ID field -->
+                         <core:ListItem key="{customerNumber}" text="{customerNumber} - {customerName}" />
+                    </suggestionItems>           
+                   </Input>
+                    
+                    <Label text='{i18n>category}' required="true"/>
+                    <ComboBox selectedKey="{complaintModel>/category}" placeholder="Select Category" class="sapUiSmallMarginBottom">
+                        <core:Item key="Billing Dispute" text="Billing Dispute"/>
+                        <core:Item key="Refund Delay" text="Refund Delay"/>
+                        <core:Item key="Delayed Delivery" text="Delayed Delivery"/>
+                        <core:Item key="Damaged Goods" text="Damaged Goods"/>
+                        <core:Item key="Incorrect Item" text="Incorrect Item"/>
+                        <core:Item key="Product Defect" text="Product Defect"/>
+                        <core:Item key="Software Bug" text="Software Bug"/>
+                        <core:Item key="Staff Behavior" text="Staff Behavior"/>
+                        <core:Item key="Account Access" text="Account Access"/>
+                        <core:Item key="Subscription Issue" text="Subscription Issue"/>
+                    </ComboBox>
+                    
+                    <Label text='{i18n>priority}' required="true" />
+                    <ComboBox selectedKey="{complaintModel>/priority}" placeholder="Select Priority" class="sapUiSmallMarginBottom">
+                        <core:Item key="Critical" text="Critical"/>
+                        <core:Item key="High" text="High"/>
+                        <core:Item key="Medium" text="Medium"/>
+                        <core:Item key="Low" text="Low"/>
+                    </ComboBox>
+                    <Label text='{i18n>subject}' required="true"/>
+                    <Input value="{complaintModel>/subject}" placeholder="Enter Subject" class="sapUiSmallMarginBottom"/>
+                    <Label text='{i18n>description}'/>
+                    <TextArea value="{complaintModel>/description}" 
+          placeholder="Enter Description"
+          rows="3"
+          growing="true"
+          width="100%"
+          class="sapUiSmallMarginBottom"/>
+                    <Label text='{i18n>assignedTo}' required="true"/>
+                    <Input value="{complaintModel>/assignedTo}" placeholder="Enter FPR"
+                        showSuggestion="true"                                           
+                        suggestionItems="{/Employees}" class="sapUiSmallMarginBottom">
+                        <suggestionItems>
+                            <core:Item text="{FirstName} {LastName}" />
+                        </suggestionItems>           
+                        </Input>
+                    <Label text='{i18n>status}' required="true"/>
+                    <ComboBox selectedKey="{complaintModel>/status}" placeholder="Select Status" class="sapUiSmallMarginBottom">
+                        <core:Item key="Open" text="Open"/>
+                        <core:Item key="Closed" text="Closed"/>
+                    </ComboBox> 
+                  
+                </f:content>
+            </f:SimpleForm>
+             <IconTabBar id="complaintTabs" class="sapUiMediumMarginTop" expandable="false">
+                <items>
+                    <!-- Comments Tab Panel -->
+                    <IconTabFilter text='{i18n>commentsTitle}'  key="commentsKey">
+                        
+                        <!-- 3. COMPLAINT COMMENTS TABLE -->
+                        <Table 
+                            id="commentsTable" 
+                            items="{complaintModel>/comments/results}" 
+                            noDataText="No comments have been posted for this complaint yet.">
+                            
+                            <headerToolbar>
+                                <OverflowToolbar>
+                                    
+                                    <Title text='{i18n>allComments}' level="H2"/>
+                                    <ToolbarSpacer />
+                                    <Button icon="sap-icon://add" text="Add Comment" type="Transparent" press="onAddComment"/>
+                                </OverflowToolbar>
+                            </headerToolbar>
+
+                            <columns>
+                                <Column width="25%">
+                                    <Text text='{i18n>commentDate}' />
+                                </Column>
+                                <Column width="25%">
+                                    <Text text='{i18n>commentedBy}' />
+                                </Column>
+                                <Column width="50%">
+                                    <Text text='{i18n>comment}' />
+                                </Column>
+                                <Column width="5rem" hAlign="Center">
+						          <Text text=""/>
+					            </Column>
+                            </columns>
+
+                            <items>
+                                <ColumnListItem vAlign="Middle">
+                                    <cells>
+                                        <DateTimePicker 
+    value="{
+        path: 'complaintModel>commentDate',
+        type: 'sap.ui.model.type.DateTime',
+        formatOptions: {
+            pattern: 'dd-MM-yyyy hh:mm a'
+        },
+        constraints: {
+            source: {
+                pattern: 'yyyy-MM-ddTHH:mm:ss.SSSX'
+            }
+        }
+    }" />
+                                       <Input value="{complaintModel>commentedBy}" placeholder="Enter Commented By" showSuggestion="true"                                           
+                    suggestionItems="{/Customers}"
+                    suggestionItemSelected="onCustomerSelected"
+                    class="sapUiSmallMarginBottom">
+                    <suggestionItems>
+                         <!-- The key attribute must hold the raw ID field -->
+                         <core:ListItem key="{customerNumber}" text="{customerNumber} - {customerName}" />
+                    </suggestionItems>           
+                   </Input>
+							           <Input value="{complaintModel>comment}" placeholder="Enter Comment"/>
+                                    </cells>
+                                    <Button icon="sap-icon://delete" type="Reject" tooltip="Delete Plant" press=".onDeleteComment"/>
+                                    
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+
+                    </IconTabFilter>
+                     <IconTabFilter text='{i18n>resolutionTitle}'  key="resolutionKey">
+                        <content>
+                        <FlexBox justifyContent="Start" width="100%" class="sapUiSmallMarginTop">
+                           <items>
+                            <f:SimpleForm editable="true"  layout="ColumnLayout" columnsXL="2" columnsL="2" columnsM="2" >
+                                <f:content>
+                                    
+                                    <Label text='{i18n>resolvedBy}' />
+                                    <Input id="idResolvedBy" value="{complaintModel>/resolution/resolvedBy}" placeholder="Enter Resolver Name"  showSuggestion="true"                                           
+                                       suggestionItems="{/Employees}" class="sapUiSmallMarginBottom">
+                                       <suggestionItems>
+                                         <core:Item text="{FirstName} {LastName}" />
+                                       </suggestionItems> 
+                                    </Input>
+
+                                    <Label text='{i18n>resolutionText}' />
+                                    <TextArea id="idResolutionText" value="{complaintModel>/resolution/resolutionText}"   placeholder="Provide resolution details..." rows="4" growing="true" width="100%" />
+
+                                    <Label text='{i18n>resolvedDate}' />
+                                    <DatePicker id="idResolvedDate"  value="{
+                                        path: 'complaintModel>/resolution/resolvedDate',
+                                        type: 'sap.ui.model.type.Date',
+                                        formatOptions: {
+                                               style: 'medium',
+                                               pattern: 'dd-MM-yyyy',
+                                               strictParsing: true,
+                                                UTC: true
+                                        }
+                                     }" />
+
+                                    
+                
+                                </f:content>
+                            </f:SimpleForm>
+                            </items>
+                         </FlexBox>
+                        </content>
+                    </IconTabFilter>
+                </items>
+            </IconTabBar>
+
+          
+        </content>
+
+        
+        <footer>
+            <OverflowToolbar>
+                <ToolbarSpacer />
+                <Button text='{i18n>resolveComplaint}' type="Success" press=".onResolveComplaint"></Button>
+                <Button text='{i18n>update}' type="Emphasized" press=".onUpdateComplaint" visible="{= !!${complaintModel>/__metadata/uri} }"/>
+                <Button text='{i18n>save}' type="Accept" press=".onSaveComplaint" visible="{= !${complaintModel>/__metadata/uri} }"/>
+                <Button text='{i18n>cancel}' type="Reject" press=".onNavBack" />
+            </OverflowToolbar>
+        </footer>
+    </Page>
+</mvc:View>

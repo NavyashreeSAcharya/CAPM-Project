@@ -1,0 +1,1 @@
+using ComplaintsService as service from '../../srv/cat-service';
